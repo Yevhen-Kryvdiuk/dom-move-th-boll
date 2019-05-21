@@ -1,30 +1,35 @@
 const field = document.querySelector('.field');
 const ball = document.querySelector('.ball');
 
+field.addEventListener('click', function (e) {
 
-field.onclick = function (e) {
     const fieldRectObject = field.getBoundingClientRect();
-    const fieldInnerCoords = {
-        top: fieldRectObject.top + field.clientTop,
-        left: fieldRectObject.left + field.clientLeft
-    };
-    const ballCoordinates = {
-        left : e.clientX - ball.clientWidth / 2 - fieldInnerCoords.left,
-        top : e.clientY - ball.clientHeight / 2 - fieldInnerCoords.top
-    };
+    const {top: fieldRectTop, left: fieldRectLeft} = fieldRectObject;
+    const {clientTop: fieldClientTop,
+           clientLeft: fieldClientLeft,
+           clientHeight: fieldHeight,
+           clientWidth: fieldWidth} = field;
+    const {clientX: clickClientX, clientY: clickClientY} = e;
+    const {clientWidth: ballWidth, clientHeight: ballHeight} = ball;
 
-    if (ballCoordinates.top < 0) ballCoordinates.top = 0;
-    if (ballCoordinates.left < 0) ballCoordinates.left = 0;
+    const fieldInnerTop = fieldRectTop + fieldClientTop;
+    const fieldInnerLeft = fieldRectLeft + fieldClientLeft;
 
-    if (ballCoordinates.left + ball.clientWidth > field.clientWidth) {
-        ballCoordinates.left = field.clientWidth - ball.clientWidth;
+    let bollTop = clickClientY - ballHeight / 2 - fieldInnerTop;
+    let ballLeft = clickClientX - ballWidth / 2 - fieldInnerLeft;
+
+    if (bollTop < 0) bollTop = 0;
+    if (ballLeft < 0) ballLeft = 0;
+
+    if (ballLeft + ballWidth > fieldWidth) {
+        ballLeft = fieldWidth - ballWidth;
     }
-    if (ballCoordinates.top + ball.clientHeight > field.clientHeight) {
-        ballCoordinates.top = field.clientHeight - ball.clientHeight;
+    if (bollTop + ballHeight > fieldHeight) {
+        bollTop = fieldHeight - ballHeight;
     }
 
-    ball.style.left = ballCoordinates.left + 'px';
-    ball.style.top = ballCoordinates.top + 'px';
+    ball.style.left = `${ballLeft}px`;
+    ball.style.top = `${bollTop}px`;
 
-};
+});
 
